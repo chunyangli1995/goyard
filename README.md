@@ -1,2 +1,2 @@
 # goyard
-go practice.
+go practice
