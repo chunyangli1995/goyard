@@ -42,3 +42,35 @@ func Construct(preOrder []int, inOrder []int) (*BinaryTreeNode, error) {
 	}
 	return constructCore(preOrder, inOrder)
 }
+
+func DoesTree1HasTree2(tree1 *BinaryTreeNode, tree2 *BinaryTreeNode) bool {
+	/**
+	判断 tree1 是否包含 tree2
+	*/
+	if tree1 == nil {
+		return false
+	}
+	if tree2 == nil {
+		return true
+	}
+	if tree1.value != tree2.value {
+		return false
+	}
+	return DoesTree1HasTree2(tree1.leftChild, tree2.leftChild) && DoesTree1HasTree2(tree1.rightChild, tree2.rightChild)
+}
+
+func HasSubTree(tree1 *BinaryTreeNode, tree2 *BinaryTreeNode) bool {
+	result := false
+	if tree1 != nil && tree2 != nil {
+		if tree1.value == tree2.value {
+			result = DoesTree1HasTree2(tree1, tree2)
+		}
+		if result == false {
+			result = DoesTree1HasTree2(tree1.leftChild, tree2)
+		}
+		if result == false {
+			result = DoesTree1HasTree2(tree1.rightChild, tree2)
+		}
+	}
+	return result
+}
