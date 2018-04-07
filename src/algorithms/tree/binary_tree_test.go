@@ -16,3 +16,11 @@ func TestConstruct(t *testing.T) {
 		t.Error("uncorrect binary tree construct")
 	}
 }
+
+func TestVerifySequenceOfBst(t *testing.T) {
+	data := []int{5, 7, 6, 9, 11, 10, 8}
+	ret := VerifySequenceOfBst(data)
+	if ret == false {
+		t.Error("uncorrect ret.")
+	}
+}

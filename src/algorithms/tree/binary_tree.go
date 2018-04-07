@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"container/list"
 	goyardError "goyard/src/err"
 )
 
@@ -73,4 +74,61 @@ func HasSubTree(tree1 *BinaryTreeNode, tree2 *BinaryTreeNode) bool {
 		}
 	}
 	return result
+}
+
+func VerifySequenceOfBst(sequence []int) bool {
+	if sequence == nil || len(sequence) == 0 {
+		return false
+	}
+	root := sequence[len(sequence)-1]
+	i := 0
+	for i < len(sequence)-1 {
+		if sequence[i] > root {
+			break
+		}
+		i++
+	}
+	j := i
+	for j < len(sequence)-1 {
+		if sequence[j] < root {
+			return false
+		}
+		j++
+	}
+	left := true
+	if i > 0 {
+		left = VerifySequenceOfBst(sequence[:i])
+	}
+	right := true
+	if i < len(sequence)-1 {
+		right = VerifySequenceOfBst(sequence[i : len(sequence)-1])
+	}
+	return left && right
+}
+
+func Convert(root *BinaryTreeNode) *BinaryTreeNode {
+	var lastNodeInList *BinaryTreeNode
+	convertNode(root, lastNodeInList)
+	for lastNodeInList != nil && lastNodeInList.leftChild != nil {
+		lastNodeInList = lastNodeInList.leftChild
+	}
+	return lastNodeInList
+}
+
+func convertNode(root *BinaryTreeNode, lastNodeInList *BinaryTreeNode) {
+	if root == nil {
+		return
+	}
+	current := root
+	if current.leftChild != nil {
+		convertNode(root.leftChild, lastNodeInList)
+	}
+	current.leftChild = lastNodeInList
+	if lastNodeInList != nil {
+		lastNodeInList.rightChild = current
+	}
+	lastNodeInList = current
+	if current.rightChild != nil {
+		convertNode(root.rightChild, lastNodeInList)
+	}
 }
