@@ -5,6 +5,12 @@ type LinkedNode struct {
 	next  *LinkedNode
 }
 
+type ComplexLinkedNode struct {
+	value   int
+	next    *ComplexLinkedNode
+	sibling *ComplexLinkedNode
+}
+
 func RemoveNode(head *LinkedNode, value int) {
 	if head == nil {
 		return
@@ -76,4 +82,51 @@ func ReverseList(head *LinkedNode) *LinkedNode {
 		pNode = pNext
 	}
 	return reversedHead
+}
+
+func CloneNodes(head *ComplexLinkedNode) {
+	node := head
+	for node != nil {
+		cloneNode := &ComplexLinkedNode{}
+		cloneNode.value = node.value
+		cloneNode.next = node.next
+		node.next = cloneNode
+		node = cloneNode.next
+	}
+}
+
+func ConnectSiblingNodes(head *ComplexLinkedNode) {
+	node := head
+	for node != nil {
+		cloneNode := node.next
+		if node.sibling != nil {
+			cloneNode.sibling = node.sibling.next
+		}
+		node = cloneNode.next
+	}
+}
+
+func ReConnectNodes(head *ComplexLinkedNode) *ComplexLinkedNode {
+	node := head
+	var cloneHead *ComplexLinkedNode
+	var cloneNode *ComplexLinkedNode
+	if node != nil {
+		cloneHead = node.next
+		cloneNode = node.next
+		node.next = cloneNode.next
+		node = node.next
+	}
+	for node != nil {
+		cloneNode.next = node.next
+		cloneNode = cloneNode.next
+		node.next = cloneNode.next
+		node = node.next
+	}
+	return cloneHead
+}
+
+func CloneComplexNode(head *ComplexLinkedNode) *ComplexLinkedNode {
+	CloneNodes(head)
+	ConnectSiblingNodes(head)
+	return ReConnectNodes(head)
 }
